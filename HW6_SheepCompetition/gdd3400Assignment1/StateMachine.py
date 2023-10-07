@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from Constants import *
 from pygame import *
 from random import *
@@ -74,6 +75,42 @@ class FindSheepState(State):
 
 		dog.calculatePathToNewTarget(dog.getTargetSheep().center)
 
+		if dog.center.x < Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
+			return InUpperLeftQuadrant()
+		if dog.center.x < Constants.WORLD_WIDTH /2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
+			return InLowerLeftQuadrant()
+		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
+			return InUpperRightQuadrant()
+		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
+			return InLowerRightQuadrant()
+		else:
+			return Idle()
+
+class InUpperLeftQuadrant(State):
+
+	def update(self, gameState):
+		super().update(gameState)
+
+		return Idle()
+
+class InLowerLeftQuadrant(State):
+
+	def update(self, gameState):
+		super().update(gameState)
+
+		return Idle()
+
+class InUpperRightQuadrant(State):
+
+	def update(self, gameState):
+		super().update(gameState)
+
+		return Idle()
+
+class InLowerRightQuadrant(State):
+
+	def update(self, gameState):
+		super().update(gameState)
 
 		return Idle()
 
