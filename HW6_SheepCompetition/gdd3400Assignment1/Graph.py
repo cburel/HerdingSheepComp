@@ -112,6 +112,9 @@ class Graph():
 			path[-1].isEnd = True
 		return path
 
+	def distance(self, curr, neighbor):
+		return math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
+
 	def findPath_Breadth(self, start, end):
 		""" Breadth Search """
 		#print("Breadth")
@@ -208,7 +211,8 @@ class Graph():
 			for neighbor in curr.neighbors:
 
 				#currDistance = Distance(currentNode, nextNode)
-				currDist = math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
+				#currDist = math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
+				currDist = self.distance(curr, neighbor)
 
 				#if next node is not visited
 				if neighbor in unvisited:
@@ -288,7 +292,8 @@ class Graph():
 			for neighbor in curr.neighbors:
 
 				#currDistance = Distance(currentNode, nextNode)
-				currDist = math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
+				#currDist = math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
+				currDist = self.distance(curr, neighbor)
 
 				#if next node is not visited
 				if neighbor in unvisited:
@@ -324,9 +329,6 @@ class Graph():
 				priorityQueue.sort(key=lambda x: x.cost, reverse=False)
 
 		return []
-
-	def distance(self, curr, neighbor):
-		return math.sqrt((curr.center.x - neighbor.center.x) ** 2 + (curr.center.y - neighbor.center.y) ** 2)
 
 	def findPath_BestFirst(self, start, end):
 		""" Best First Search """
