@@ -90,7 +90,7 @@ class InUpperLeftQuadrant(State):
 
 	def update(self, gameState):
 		super().update(gameState)
-		
+			
 		return Idle()
 
 class InLowerLeftQuadrant(State):
