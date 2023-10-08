@@ -66,10 +66,7 @@ class FindSheepState(State):
 		""" Update this state using the current gameState """
 		super().update(gameState)
 		dog = gameState.getDog()
-
-		# Pick a random sheep
-		#dog.setTargetSheep(gameState.getHerd()[0])
-
+		
 		#pick the closest sheep
 		herd = gameState.getHerd()
 		dog.setTargetSheep(min([s for s in herd], key=lambda s: dog.center.distance_to(Vector(s.center.x, s.center.y))))
@@ -77,11 +74,11 @@ class FindSheepState(State):
 		# You could add some logic here to pick which state to go to next
 		# depending on the gameState
 
-		dog.calculatePathToNewTarget(dog.getTargetSheep().center)
+		#dog.calculatePathToNewTarget(dog.getTargetSheep().center)
 
 		if dog.center.x < Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
 			return InUpperLeftQuadrant()
-		if dog.center.x < Constants.WORLD_WIDTH /2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
+		if dog.center.x < Constants.WORLD_WIDTH / 2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
 			return InLowerLeftQuadrant()
 		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
 			return InUpperRightQuadrant()
@@ -92,41 +89,106 @@ class FindSheepState(State):
 
 class InUpperLeftQuadrant(State):
 
+	def enter(self):
+		super().enter()
+
 	def update(self, gameState):
 		super().update(gameState)
 		
 		dog = gameState.getDog()
 		sheep = dog.getTargetSheep()
+		graph = gameState.getGraph()
 
 		if sheep.center.y > dog.center.y:
 			print("sheep y > dog y. sheep is below dog.")
+			dog.calculatePathToNewTarget(sheep.center)
 			
 		if sheep.center.y < dog.center.y:
 			print ("sheep y < dog y. sheep is above dog.")
 			#move dog to above sheep
+			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE * 2)
+			dog.targetNode = graph.getNodeFromPoint(targetPoint)
+			dog.calculatePathToNewTarget(dog.targetNode)
 		
 		return Idle()
 
+	def exit(self):
+		super().exit()
+
 class InLowerLeftQuadrant(State):
+
+	def enter(self):
+		super().enter()
 
 	def update(self, gameState):
 		super().update(gameState)
 
+		dog = gameState.getDog()
+		sheep = dog.getTargetSheep()
+
+		if sheep.center.y > dog.center.y:
+			print("sheep y > dog y. sheep is below dog.")
+			#move dog to below sheep
+			dog.calculatePathToNewTarget(sheep.center)
+
+		if sheep.center.y < dog.center.y:
+			print ("sheep y < dog y. sheep is above dog.")
+			dog.calculatePathToNewTarget(sheep.center)
+
 		return Idle()
+
+	def exit(self):
+		super().exit()
 
 class InUpperRightQuadrant(State):
 
+	def enter(self):
+		super().enter()
+
 	def update(self, gameState):
 		super().update(gameState)
 
+		dog = gameState.getDog()
+		sheep = dog.getTargetSheep()
+
+		if sheep.center.y > dog.center.y:
+			print("sheep y > dog y. sheep is below dog.")
+			dog.calculatePathToNewTarget(sheep.center)
+
+		if sheep.center.y < dog.center.y:
+			print ("sheep y < dog y. sheep is above dog.")
+			#move dog to above sheep
+			dog.calculatePathToNewTarget(sheep.center)
+
 		return Idle()
+
+	def exit(self):
+		super().exit()
 
 class InLowerRightQuadrant(State):
 
+	def enter(self):
+		super().enter()
+
 	def update(self, gameState):
 		super().update(gameState)
 
+		dog = gameState.getDog()
+		sheep = dog.getTargetSheep()
+
+		if sheep.center.y > dog.center.y:
+			print("sheep y > dog y. sheep is below dog.")
+			#move dog to below sheep
+			dog.calculatePathToNewTarget(sheep.center)
+
+		if sheep.center.y < dog.center.y:
+			print ("sheep y < dog y. sheep is above dog.")
+			dog.calculatePathToNewTarget(sheep.center)
+
 		return Idle()
+
+	def exit(self):
+		super().exit()
 
 class Idle(State):
 	""" This is an idle state where the dog does nothing """

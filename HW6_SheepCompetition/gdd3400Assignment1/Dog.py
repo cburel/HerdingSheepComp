@@ -24,6 +24,7 @@ class Dog(Agent):
 		self.path = []
 		self.stateMachine = StateMachine(FindSheepState())
 		self.targetSheep = None
+		self.targetNode = None
 
 	def setTargetSheep(self, sheep):
 		self.targetSheep = sheep
