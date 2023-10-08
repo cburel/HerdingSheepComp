@@ -89,5 +89,5 @@ class Dog(Agent):
 
 		if Constants.DEBUG_DOG_TARGET and self.targetSheep != None:
 			pygame.draw.line(screen, (255, 0, 0), (self.center.x, self.center.y), 
-				(self.targetSheep.center.x, self.targetSheep.center.y), DEBUG_DOG_TARGET_LINE_WIDTH)
+				(self.targetSheep.center.x, self.targetSheep.center.y), Constants.DEBUG_DOG_TARGET_LINE_WIDTH)
 

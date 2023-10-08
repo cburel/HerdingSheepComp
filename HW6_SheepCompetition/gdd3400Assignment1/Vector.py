@@ -33,4 +33,8 @@ class Vector:
 			return Vector(self.x, self.y)
 
 	def lerp(self, end, percent):
-		 return self + (end - self).scale(percent)
+		return self + (end - self).scale(percent)
+
+	# returns euclidean distance between 2 vectors
+	def distance_to(self, other):
+		return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)

@@ -68,7 +68,11 @@ class FindSheepState(State):
 		dog = gameState.getDog()
 
 		# Pick a random sheep
-		dog.setTargetSheep(gameState.getHerd()[0])
+		#dog.setTargetSheep(gameState.getHerd()[0])
+
+		#pick the closest sheep
+		herd = gameState.getHerd()
+		dog.setTargetSheep(min([s for s in herd], key=lambda s: dog.center.distance_to(Vector(s.center.x, s.center.y))))
 
 		# You could add some logic here to pick which state to go to next
 		# depending on the gameState
@@ -90,7 +94,17 @@ class InUpperLeftQuadrant(State):
 
 	def update(self, gameState):
 		super().update(gameState)
+		
+		dog = gameState.getDog()
+		sheep = dog.getTargetSheep()
+
+		if sheep.center.y > dog.center.y:
+			print("sheep y > dog y. sheep is below dog.")
 			
+		if sheep.center.y < dog.center.y:
+			print ("sheep y < dog y. sheep is above dog.")
+			#move dog to above sheep
+		
 		return Idle()
 
 class InLowerLeftQuadrant(State):
