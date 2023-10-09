@@ -84,8 +84,6 @@ class FindSheepState(State):
 			return InUpperRightQuadrant()
 		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
 			return InLowerRightQuadrant()
-		else:
-			return Idle()
 
 class InUpperLeftQuadrant(State):
 
@@ -106,9 +104,9 @@ class InUpperLeftQuadrant(State):
 		if sheep.center.y < dog.center.y:
 			print ("sheep y < dog y. sheep is above dog.")
 			#move dog to above sheep
-			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE * 2)
-			dog.targetNode = graph.getNodeFromPoint(targetPoint)
-			dog.calculatePathToNewTarget(dog.targetNode)
+			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
+			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
+			dog.calculatePathToNewTarget(targetPoint)
 		
 		return Idle()
 
@@ -125,11 +123,14 @@ class InLowerLeftQuadrant(State):
 
 		dog = gameState.getDog()
 		sheep = dog.getTargetSheep()
+		graph = gameState.getGraph()
 
 		if sheep.center.y > dog.center.y:
 			print("sheep y > dog y. sheep is below dog.")
 			#move dog to below sheep
-			dog.calculatePathToNewTarget(sheep.center)
+			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
+			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
+			dog.calculatePathToNewTarget(targetPoint)
 
 		if sheep.center.y < dog.center.y:
 			print ("sheep y < dog y. sheep is above dog.")
@@ -150,6 +151,7 @@ class InUpperRightQuadrant(State):
 
 		dog = gameState.getDog()
 		sheep = dog.getTargetSheep()
+		graph = gameState.getGraph()
 
 		if sheep.center.y > dog.center.y:
 			print("sheep y > dog y. sheep is below dog.")
@@ -158,7 +160,9 @@ class InUpperRightQuadrant(State):
 		if sheep.center.y < dog.center.y:
 			print ("sheep y < dog y. sheep is above dog.")
 			#move dog to above sheep
-			dog.calculatePathToNewTarget(sheep.center)
+			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
+			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
+			dog.calculatePathToNewTarget(targetPoint)
 
 		return Idle()
 
@@ -175,11 +179,14 @@ class InLowerRightQuadrant(State):
 
 		dog = gameState.getDog()
 		sheep = dog.getTargetSheep()
+		graph = gameState.getGraph()
 
 		if sheep.center.y > dog.center.y:
 			print("sheep y > dog y. sheep is below dog.")
 			#move dog to below sheep
-			dog.calculatePathToNewTarget(sheep.center)
+			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
+			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
+			dog.calculatePathToNewTarget(targetPoint)
 
 		if sheep.center.y < dog.center.y:
 			print ("sheep y < dog y. sheep is above dog.")
