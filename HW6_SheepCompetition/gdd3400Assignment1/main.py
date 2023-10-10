@@ -140,7 +140,7 @@ def computeNeighbors(herd):
 
 # Comment-in this line if you want to test on the same exact configuration of
 # objects as the last time.  Change the number to test out some variations
-#random.seed(1005)
+random.seed(1005)
 
 pygame.init();
 

@@ -87,17 +87,17 @@ class HerdSheep(State):
 		graph = gameState.getGraph()
 		penX = Constants.WORLD_WIDTH / 2
 		penY = Constants.WORLD_HEIGHT / 2
-		r = Constants.GRID_SIZE * 5
-
-		#compute relative direction of sheep relative to pen center
-		theta = atan2(sheep.center.y - penY, sheep.center.x - penX)
-
-		#compute target point
-		target = Vector(0, 0)
-		target.x = sheep.center.x + r * math.cos(theta)
-		target.y = sheep.center.y + r * math.sin(theta)
+		r = Constants.GRID_SIZE * 3
 
 		if not dog.isFollowingPath:
+			#compute relative direction of sheep relative to pen center
+			theta = atan2(sheep.center.y - penY, sheep.center.x - penX)
+
+			#compute target point
+			target = Vector(0, 0)
+			target.x = sheep.center.x + r * math.cos(theta)
+			target.y = sheep.center.y + r * math.sin(theta)
+
 			targetNode = graph.getNodeFromPoint(target)
 			if targetNode.isWalkable:
 				dog.calculatePathToNewTarget(target)
