@@ -1,4 +1,5 @@
 from asyncio.windows_events import NULL
+from math import atan2
 from Constants import *
 from pygame import *
 from random import *
@@ -69,129 +70,41 @@ class FindSheepState(State):
 		
 		#pick the closest sheep
 		herd = gameState.getHerd()
-		dog.setTargetSheep(min([s for s in herd], key=lambda s: dog.center.distance_to(Vector(s.center.x, s.center.y))))
+		#dog.setTargetSheep(min([s for s in herd], key=lambda s: dog.center.distance_to(Vector(s.center.x, s.center.y))))
+		dog.setTargetSheep(gameState.getHerd()[0])
 
 		# You could add some logic here to pick which state to go to next
 		# depending on the gameState
 
-		#dog.calculatePathToNewTarget(dog.getTargetSheep().center)
+		return HerdSheep()
 
-		if dog.center.x < Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
-			return InUpperLeftQuadrant()
-		if dog.center.x < Constants.WORLD_WIDTH / 2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
-			return InLowerLeftQuadrant()
-		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y < Constants.WORLD_HEIGHT / 2:
-			return InUpperRightQuadrant()
-		if dog.center.x > Constants.WORLD_WIDTH / 2 and dog.center.y > Constants.WORLD_HEIGHT / 2:
-			return InLowerRightQuadrant()
-
-class InUpperLeftQuadrant(State):
-
-	def enter(self):
-		super().enter()
-
-	def update(self, gameState):
-		super().update(gameState)
-		
-		dog = gameState.getDog()
-		sheep = dog.getTargetSheep()
-		graph = gameState.getGraph()
-
-		if sheep.center.y > dog.center.y:
-			print("sheep y > dog y. sheep is below dog.")
-			dog.calculatePathToNewTarget(sheep.center)
-			
-		if sheep.center.y < dog.center.y:
-			print ("sheep y < dog y. sheep is above dog.")
-			#move dog to above sheep
-			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
-			dog.calculatePathToNewTarget(targetPoint)
-		
-		return Idle()
-
-	def exit(self):
-		super().exit()
-
-class InLowerLeftQuadrant(State):
-
-	def enter(self):
-		super().enter()
-
+class HerdSheep(State):
 	def update(self, gameState):
 		super().update(gameState)
 
 		dog = gameState.getDog()
 		sheep = dog.getTargetSheep()
 		graph = gameState.getGraph()
+		penX = Constants.WORLD_WIDTH / 2
+		penY = Constants.WORLD_HEIGHT / 2
+		r = Constants.GRID_SIZE * 5
 
-		if sheep.center.y > dog.center.y:
-			print("sheep y > dog y. sheep is below dog.")
-			#move dog to below sheep
-			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
-			dog.calculatePathToNewTarget(targetPoint)
+		#compute relative direction of sheep relative to pen center
+		theta = atan2(sheep.center.y - penY, sheep.center.x - penX)
 
-		if sheep.center.y < dog.center.y:
-			print ("sheep y < dog y. sheep is above dog.")
-			dog.calculatePathToNewTarget(sheep.center)
+		#compute target point
+		target = Vector(0, 0)
+		target.x = sheep.center.x + r * math.cos(theta)
+		target.y = sheep.center.y + r * math.sin(theta)
 
-		return Idle()
-
-	def exit(self):
-		super().exit()
-
-class InUpperRightQuadrant(State):
-
-	def enter(self):
-		super().enter()
-
-	def update(self, gameState):
-		super().update(gameState)
-
-		dog = gameState.getDog()
-		sheep = dog.getTargetSheep()
-		graph = gameState.getGraph()
-
-		if sheep.center.y > dog.center.y:
-			print("sheep y > dog y. sheep is below dog.")
-			dog.calculatePathToNewTarget(sheep.center)
-
-		if sheep.center.y < dog.center.y:
-			print ("sheep y < dog y. sheep is above dog.")
-			#move dog to above sheep
-			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
-			dog.calculatePathToNewTarget(targetPoint)
+		if not dog.isFollowingPath:
+			targetNode = graph.getNodeFromPoint(target)
+			if targetNode.isWalkable:
+				dog.calculatePathToNewTarget(target)
+			else:
+				dog.calculatePathToNewTarget(sheep.center)
 
 		return Idle()
-
-	def exit(self):
-		super().exit()
-
-class InLowerRightQuadrant(State):
-
-	def enter(self):
-		super().enter()
-
-	def update(self, gameState):
-		super().update(gameState)
-
-		dog = gameState.getDog()
-		sheep = dog.getTargetSheep()
-		graph = gameState.getGraph()
-
-		if sheep.center.y > dog.center.y:
-			print("sheep y > dog y. sheep is below dog.")
-			#move dog to below sheep
-			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
-			dog.calculatePathToNewTarget(targetPoint)
-
-		if sheep.center.y < dog.center.y:
-			print ("sheep y < dog y. sheep is above dog.")
-			dog.calculatePathToNewTarget(sheep.center)
-
-		return Idle()
-
-	def exit(self):
-		super().exit()
 
 class Idle(State):
 	""" This is an idle state where the dog does nothing """
