@@ -105,7 +105,6 @@ class InUpperLeftQuadrant(State):
 			print ("sheep y < dog y. sheep is above dog.")
 			#move dog to above sheep
 			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
-			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
 			dog.calculatePathToNewTarget(targetPoint)
 		
 		return Idle()
@@ -129,7 +128,6 @@ class InLowerLeftQuadrant(State):
 			print("sheep y > dog y. sheep is below dog.")
 			#move dog to below sheep
 			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
-			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
 			dog.calculatePathToNewTarget(targetPoint)
 
 		if sheep.center.y < dog.center.y:
@@ -161,7 +159,6 @@ class InUpperRightQuadrant(State):
 			print ("sheep y < dog y. sheep is above dog.")
 			#move dog to above sheep
 			targetPoint = Vector(sheep.center.x, sheep.center.y - Constants.GRID_SIZE)
-			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
 			dog.calculatePathToNewTarget(targetPoint)
 
 		return Idle()
@@ -185,7 +182,6 @@ class InLowerRightQuadrant(State):
 			print("sheep y > dog y. sheep is below dog.")
 			#move dog to below sheep
 			targetPoint = Vector(sheep.center.x, sheep.center.y + Constants.GRID_SIZE)
-			#dog.targetNode = graph.getNodeFromPoint(targetPoint)
 			dog.calculatePathToNewTarget(targetPoint)
 
 		if sheep.center.y < dog.center.y:
