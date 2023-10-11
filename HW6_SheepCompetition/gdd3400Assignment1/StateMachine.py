@@ -68,9 +68,7 @@ class FindSheepState(State):
 		super().update(gameState)
 		dog = gameState.getDog()
 		
-		#pick the closest sheep
-		herd = gameState.getHerd()
-		#dog.setTargetSheep(min([s for s in herd], key=lambda s: dog.center.distance_to(Vector(s.center.x, s.center.y))))
+		#pick the first sheep in the current list
 		dog.setTargetSheep(gameState.getHerd()[0])
 
 		# You could add some logic here to pick which state to go to next
